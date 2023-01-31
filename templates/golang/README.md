@@ -18,6 +18,7 @@ This template contains a list of questions that you can use to interview a Golan
     - [ ] Use Golang :)
     - [ ] Use Dummy storage (you can use any storage you want)
     - [ ] Use layer separation
+    - [ ] Use API [rest, graphql, grpc] (you can use any API type you want)
     - [ ] Use DDD [optional]
     - [ ] Use dependency injection (you can use any DI you want) [optional]
     - [ ] Use mapping to DTO (you can use any mapping you want) [optional]

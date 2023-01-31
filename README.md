@@ -16,4 +16,4 @@ There are no contribution guide yet. If you want to contribute, please open an i
 
 ## The list of templates
 
-- [ ] Golang interview questions
+- [x] Golang interview questions. Link to the template: [templates/golang/README.md](templates/golang/README.md)
