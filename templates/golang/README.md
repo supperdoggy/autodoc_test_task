@@ -2,6 +2,14 @@
 
 This template contains a list of questions that you can use to interview a Golang developer.
 
+## How to use
+
+1. Clone this repository
+2. Create a new branch
+3. Solve the interview questions
+4. Open a pull request
+5. Wait for the review
+
 # TODO
 
 1. Look at the architecture diagram and implement an application (no complications).
