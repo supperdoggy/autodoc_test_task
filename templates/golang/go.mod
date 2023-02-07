@@ -1,3 +1,3 @@
-module github.com/igorrius/interview-templates/template/golang
+module github.com/Autodoc-Technology/interview-templates/template/golang
 
 go 1.19
