@@ -12,6 +12,11 @@ import (
 )
 
 type IMongoClient interface {
+	CreateUser(ctx context.Context, u *models.User) (*models.User, error)
+	GetUserByID(ctx context.Context, id string) (*models.User, error)
+	GetUserByEmail(ctx context.Context, email string) (*models.User, error)
+	DeleteUser(ctx context.Context, id string) error
+	ListUsers(ctx context.Context, max, skip int64) ([]models.User, error)
 }
 
 type mongoClient struct {
@@ -35,10 +40,10 @@ func NewMongoClient(ctx context.Context, url string, l *zap.Logger) (IMongoClien
 	}, nil
 }
 
-func (c *mongoClient) CreateUser(ctx context.Context, u *models.User) error {
+func (c *mongoClient) CreateUser(ctx context.Context, u *models.User) (*models.User, error) {
 	u.ID = uuid.New().String()
 	_, err := c.usersCol.InsertOne(ctx, u)
-	return err
+	return u, err
 }
 
 func (c *mongoClient) GetUserByID(ctx context.Context, id string) (*models.User, error) {
@@ -72,4 +77,21 @@ func (c *mongoClient) DeleteUser(ctx context.Context, id string) error {
 	return err
 }
 
-func (c *mongoClient) ListUsers(ctx context.Context, max, skip int)
+func (c *mongoClient) ListUsers(ctx context.Context, max, skip int64) ([]models.User, error) {
+	resp := []models.User{}
+	opts := options.Find().SetLimit(max).SetSkip(skip)
+	cur, err := c.usersCol.Find(ctx, bson.M{"is_deleted": false}, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	for cur.Next(ctx) {
+		var u models.User
+		if err := cur.Decode(&u); err != nil {
+			return nil, err
+		}
+
+		resp = append(resp, u)
+	}
+	return resp, nil
+}
