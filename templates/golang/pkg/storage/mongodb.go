@@ -16,7 +16,7 @@ type IMongoClient interface {
 	GetUserByID(ctx context.Context, id string) (*models.User, error)
 	GetUserByEmail(ctx context.Context, email string) (*models.User, error)
 	DeleteUser(ctx context.Context, id string) error
-	ListUsers(ctx context.Context, max, skip int64) ([]models.User, error)
+	ListUsers(ctx context.Context, max, skip int) ([]models.User, error)
 }
 
 type mongoClient struct {
@@ -77,9 +77,9 @@ func (c *mongoClient) DeleteUser(ctx context.Context, id string) error {
 	return err
 }
 
-func (c *mongoClient) ListUsers(ctx context.Context, max, skip int64) ([]models.User, error) {
+func (c *mongoClient) ListUsers(ctx context.Context, max, skip int) ([]models.User, error) {
 	resp := []models.User{}
-	opts := options.Find().SetLimit(max).SetSkip(skip)
+	opts := options.Find().SetLimit(int64(max)).SetSkip(int64(skip))
 	cur, err := c.usersCol.Find(ctx, bson.M{"is_deleted": false}, opts)
 	if err != nil {
 		return nil, err

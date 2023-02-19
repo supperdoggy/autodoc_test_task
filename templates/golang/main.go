@@ -41,8 +41,8 @@ func main() {
 	apiUser := api.Group("/user")
 	apiUser.POST("/create", handlers.CreateUser)
 	apiUser.POST("/get", handlers.GetUser)
-	apiUser.POST("/delete", handlers.DeleteUser)
-	apiUser.POST("/list", handlers.ListUsers)
+	apiUser.DELETE("/delete", handlers.DeleteUser)
+	apiUser.GET("/list", handlers.ListUsers)
 
 	if err := r.Run(fmt.Sprintf("localhost:%d", cfg.Port)); err != nil {
 		logger.Fatal("error r.Run", zap.Error(err))

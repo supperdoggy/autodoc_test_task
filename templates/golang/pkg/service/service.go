@@ -15,7 +15,7 @@ type IService interface {
 	GetUserByID(ctx context.Context, id string) (*models.User, error)
 	GetUserByEmail(ctx context.Context, email string) (*models.User, error)
 	DeleteUser(ctx context.Context, id string) error
-	ListUsers(ctx context.Context, limit, skip int64) ([]models.User, error)
+	ListUsers(ctx context.Context, limit, skip int) ([]models.User, error)
 }
 
 type service struct {
@@ -85,7 +85,7 @@ func (s *service) DeleteUser(ctx context.Context, id string) error {
 	return nil
 }
 
-func (s *service) ListUsers(ctx context.Context, limit, skip int64) ([]models.User, error) {
+func (s *service) ListUsers(ctx context.Context, limit, skip int) ([]models.User, error) {
 	resp, err := s.db.ListUsers(ctx, limit, skip)
 	if err != nil {
 		s.logger.Error("error ListUsers", zap.Error(err))

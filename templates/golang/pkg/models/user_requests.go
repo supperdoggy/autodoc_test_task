@@ -19,11 +19,6 @@ type DeleteUserRequest struct {
 	ID string `json:"id"`
 }
 
-type ListUsersRequest struct {
-	Limit int64 `json:"limit"`
-	Skip  int64 `json:"skip"`
-}
-
 type ListUserResponse struct {
 	Users []User `json:"users"`
 	Error string `json:"error"`

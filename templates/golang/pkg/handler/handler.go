@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"net/http"
+	"strconv"
 
 	"github.com/Autodoc-Technology/interview-templates/template/golang/pkg/models"
 	"github.com/Autodoc-Technology/interview-templates/template/golang/pkg/service"
@@ -75,7 +76,7 @@ func (h *handler) GetUser(c *gin.Context) {
 	if req.ID != nil {
 		resp.User, err = h.service.GetUserByID(ctx, *req.ID)
 	} else if req.Email != nil {
-		resp.User, err = h.service.GetUserByID(ctx, *req.Email)
+		resp.User, err = h.service.GetUserByEmail(ctx, *req.Email)
 	} else {
 		resp.Error = "error invalid request body"
 		c.JSON(http.StatusBadRequest, resp)
@@ -121,24 +122,19 @@ func (h *handler) DeleteUser(c *gin.Context) {
 
 func (h *handler) ListUsers(c *gin.Context) {
 	var (
-		req  models.ListUsersRequest
 		resp models.ListUserResponse
 		ctx  context.Context
 		err  error
 	)
 
-	if err := c.Bind(&req); err != nil {
-		h.logger.Error("error Bing", zap.Error(err))
-		resp.Error = "error reading request"
-		c.JSON(http.StatusBadRequest, resp)
-		return
-	}
+	limit, _ := strconv.Atoi(c.Param("limit"))
+	skip, _ := strconv.Atoi(c.Param("skip"))
 
-	h.logger.Info("ListUsers")
+	h.logger.Info("ListUsers", zap.Any("limit", limit), zap.Any("skip", skip))
 
-	users, err := h.service.ListUsers(ctx, req.Limit, req.Skip)
+	users, err := h.service.ListUsers(ctx, limit, skip)
 	if err != nil {
-		h.logger.Error("error listing users", zap.Error(err), zap.Any("req", req))
+		h.logger.Error("error listing users", zap.Error(err))
 		resp.Error = err.Error()
 		c.JSON(http.StatusInternalServerError, resp)
 		return
